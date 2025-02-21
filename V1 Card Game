@@ -1,0 +1,192 @@
+import time
+import math
+import random
+
+# TO-DO
+# add the drawCard() function to player 2 and set it up with function
+# re-do code into functions
+
+
+deck = [3,4,5,6,7,8,9,10,11,12,13,14]
+
+playerOneTurn = True
+
+playerOneTotal = 0
+playerTwoTotal = 0
+
+playerOneWins = 0
+playerTwoWins = 0
+
+playerOneOver = False
+playerTwoOver = False
+
+playerOnePerfectScore = False
+playerTwoPerfectScore = False
+
+def drawCard(player):
+    global playerOneTotal
+    global playerTwoTotal
+    global deck
+
+    if (player == 1):
+
+        drewCardRisk = deck[0]
+        deck.remove(deck[0])
+        deck.append(drewCardRisk)
+
+        return drewCardRisk
+
+    elif (player == 2):
+
+        drewCardRisk2 = deck[0]
+        deck.remove(deck[0])
+        deck.append(drewCardRisk2)
+
+        return drewCardRisk2
+        
+def riskFunctionAsk():
+    while True:
+        riskAsk = input("\nDo you want to risk or keep? (Risk/Keep) ")
+        if (riskAsk.lower()[0] == "r"):
+            return True
+            break
+
+        elif (riskAsk.lower()[0] == "k"):
+            return False
+            break
+        else: 
+            print("Please input a \"Risk\" or a \"Keep\".")
+    
+
+while True:
+    
+    playerOneTotal = 0
+    playerTwoTotal = 0
+
+
+    print("Shuffling the cards...")
+    time.sleep(2)
+    random.shuffle(deck)
+    
+    for rounds in range(5):
+
+        print("\nRound", rounds + 1)
+        time.sleep(2)
+
+        while playerOneTurn: # P1 Turns
+
+            # draw first card
+            drewCardStart = deck[0]
+            deck.remove(deck[0])
+            deck.append(drewCardStart)
+
+            playerOneTotal = drewCardStart
+
+            print("\nPlayer one, you drew a", drewCardStart, "/ 26.")
+            time.sleep(1)
+            
+            while True: # Drawing Section for P1
+
+                # ask P1 if they want to risk or keep
+                riskQuestion = riskFunctionAsk()
+
+                if (riskQuestion):
+                    print("\nOkay, you risked! We will draw another card!")
+                    time.sleep(2)
+                    
+                    drewCard = drawCard(1)
+
+                    # add drew card to player 1 total
+                    playerOneTotal = playerOneTotal + drewCard
+                    print("\nYou drew a", str(drewCard) + ". You now have", playerOneTotal, "/ 26.")
+
+                    if (playerOneTotal > 26):
+                        print("\nYou got more than 26, you lose! For now... If Player 2 get's over 26, this round won't count!")
+                        playerOneOver = True
+                        break
+                    elif (playerOneTotal == 26):
+                        print("\nYou got 26! Let's see what Player 2 can do...")
+                        playerOnePerfectScore = True
+                        break
+
+                elif (riskQuestion == False):
+                    print("\nOkay, Player 2's turn!")
+                    time.sleep(2)
+                    break
+
+                else: 
+                    print("\nPlease Input a \"Risk\" or a \"Keep\"")
+            
+            playerOneTurn = False
+
+        while playerOneTurn == False: # P2s turn
+
+            # draw first card                
+            drewCardStart2 = deck[0]
+            deck.remove(deck[0])
+            deck.append(drewCardStart2)
+
+            playerTwoTotal = drewCardStart2
+
+            print("\nPlayer Two, you drew a", playerTwoTotal, "/ 26.")
+            time.sleep(1)
+            
+            while True: # Drawing Section for P2
+
+                riskQuestion = riskFunctionAsk()
+
+                if (riskQuestion):
+                    print("\nOkay, you risked! We will draw another card!")
+                    time.sleep(2)
+
+                    # draw another card
+                    drewCard2 = drawCard(2)
+
+                    playerTwoTotal = playerTwoTotal + drewCard2
+                    print("\nYou drew a", str(drewCard2) + ". You now have", playerTwoTotal, "/ 26.")
+
+                    if (playerTwoTotal > 26):
+                        print("\nNice try, you got over 26!")
+                        playerTwoOver = True
+                        break
+
+                    elif (playerTwoTotal == 26):   
+                        print("\nGood job! You got exactly twenty six!")
+                        playerTwoPerfectScore = True
+                        break
+
+                elif (riskQuestion == False):
+                    print("\nOkay, let's see who won!")
+                    time.sleep(2)
+                    break
+
+                else: 
+                    print("\nPlease Input a \"Risk\" or a \"Keep\"")
+
+            playerOneTurn = True
+
+        # checking who won
+        if (playerOneOver and playerTwoOver):
+            print("You BOTH got over 26! This round won't count ):")
+        
+        elif (playerOneOver):
+            playerTwoWins = playerTwoWins + 1
+            print(f"Player one got over 26! Player two wins {playerTwoWins} wins")
+        
+        elif (playerTwoOver):
+            playerOneWins = playerOneWins + 1
+            print(f"Player two got over 26! Player one wins {playerOneWins} wins")
+        
+        elif (playerOneTotal == playerTwoTotal):
+            print("It's a tie!!")
+        
+        elif (playerOneTotal > playerTwoTotal):
+            playerOneWins = playerOneWins + 1
+            print(f"Player one got closer to 26! Player one wins and has {playerOneWins} wins")
+        
+        elif (playerOneTotal < playerTwoTotal):
+            playerTwoWins = playerTwoWins + 1
+            print(f"Player two got closer to 26! Player two wins!!! and has {playerTwoWins} wins")
+             
+
+    break
