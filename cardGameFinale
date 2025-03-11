@@ -1,0 +1,320 @@
+import time #imports
+import math
+import random
+
+# TO-DO
+# MAKE NEW FUNCTIONS ON P2 SIDE
+# re-do code into functions
+
+
+deck = [3,4,5,6,7,8,9,10,11,12,13,14] #deck values
+
+playerOneTurn = True #player 1 goes first
+
+#set variables
+playerOneTotal = 0
+playerTwoTotal = 0
+
+playerOneWins = 0
+playerTwoWins = 0
+
+playerOneOver = False
+playerTwoOver = False
+
+playerOnePerfectScore = False
+playerTwoPerfectScore = False
+
+def intro(): # set into function
+    print("\nThe deck has 3-14.\n\n First, you draw a first card to start your hand. \nAfter, you have the choice to risk or keep. \nWhen you risk, you draw another card out of the deck.")
+    print("\nIf you risk and go over 26, you lose and the other player wins. \nIf both players went over 26, it is a tie and no one gets a point.")
+    print("\nThere are five rounds, whoever has the most wins after those rounds wins the whole game.")
+
+    while True:
+        askIfReady = input("\nAre you ready to play!? ")
+
+        if (askIfReady == ""):
+            print("\nPlease input a yes or a no.")
+
+        elif (askIfReady.lower()[0] == "y"):
+            print("Okay!!!\n\n")
+            break
+        
+        elif (askIfReady.lower()[0] == "n"):
+            print("Well, you're going to play anyway!")
+            break
+
+def drawCard(player): # set draw card function with player parameter
+    global playerOneTotal #gets global variables
+    global playerTwoTotal
+    global deck
+
+    if (player == 1):  #if player parameter is 1
+
+        drewCardRisk = deck[0] # set drew card to decks value [0]
+        deck.remove(deck[0]) # remove that value
+        deck.append(drewCardRisk) # append that value to the deck
+
+        return drewCardRisk # return that value
+
+    elif (player == 2): #if player parameter is 2
+
+        drewCardRisk2 = deck[0] # set drew card 2 to decks value [0]
+        deck.remove(deck[0]) # remove that value
+        deck.append(drewCardRisk2) # append that value to the deck
+
+        return drewCardRisk2 # return that value
+        
+def riskFunctionAsk(): # set riskFunctionAsk function
+    while True: #  while true
+        riskAsk = input("\nDo you want to risk or keep? (Risk/Keep) ") # set riskAsk var to an input
+
+        if (riskAsk == ""): # if riskAsk is nothing
+            print("Please input a \"Risk\" or a \"Keep\".") # tell plr to input correct value
+
+        elif (riskAsk.lower()[0] == "r"): # if riskAsk first char is r
+            return True # return true
+            break # break out of the while loop
+
+        elif (riskAsk.lower()[0] == "k"):
+            return False # return false
+            break # break out of the while loop
+        else: 
+            print("Please input a \"Risk\" or a \"Keep\".") # tell plr to input correct value
+
+def playAgain(): # set playAgain function
+    while True: # while true
+        plrInput = input("Would you like to play again? ") # set plrInput to an input
+
+        if (plrInput == ""): # if plr input is nothing
+            print("Please Input a Yes or a No.") # tell plr to input a yes or a no
+
+        elif (plrInput.lower()[0] == "y"): # else if plrInput's first letter is y
+            return True # return true
+            break 
+        
+        elif (plrInput.lower()[0] == "n"): # else if plr input's first letter is n
+            return False # return false
+            break
+        
+        else: # else
+            print("Please Input a Yes or a No.") # tell plr to input a yes or a no
+
+
+
+def setVars(): # set vars
+    global playerOneOver # get global vars that is needed
+    global playerTwoOver
+    global playerOnePerfectScore
+    global playerTwoPerfectScore
+    global playerOneTotal
+    global playerTwoTotal
+
+    playerOneOver = False # reset all of the variables
+    playerTwoOver = False
+
+    playerOnePerfectScore = False
+    playerTwoPerfectScore = False
+
+    playerOneTotal = 0
+    playerTwoTotal = 0 
+
+def shuffle(): # set shuffle function to shuffle cards
+    global deck # get variable deck
+
+    print("Shuffling the cards...") # tell the plrs shuffling the cards
+    time.sleep(2) # wait 2 secs
+    random.shuffle(deck) # shuffle the deck
+
+def printRound(rounds): # set printRound function with 'rounds' parameter
+    print("\nRound", rounds + 1) # print round and the rounds parameter
+    time.sleep(2) # wait 2 secs
+
+def drawFirstCard(): # set drawFirstCard function
+    global deck # get deck via global vars
+
+    # draw first card
+    drewCardStart = deck[0] # set deck index 0 to drewcardstart
+    deck.remove(deck[0]) # remove that value from the deck
+    deck.append(drewCardStart) # append that value to the end of the deck
+
+    return drewCardStart # return that value
+
+def checkPlayerTotal(plr): # set checkPlayerTotal function with plr parameter
+    global playerOneOver # get global vars
+    global playerOnePerfectScore
+
+    global playerTwoOver
+    global playerTwoPerfectScore
+
+    if (plr == 1): # if plr parameter is 1
+
+        if (playerOneTotal > 26): # if playerOneTotal is greater than 26
+            print("\nYou got more than 26, you lose! For now... If Player 2 get's over 26, this round won't count!") # print plr 1 got more than 26
+            playerOneOver = True # set playerOneOver to true
+
+            return "Over" # return over
+        elif (playerOneTotal == 26): # else if playerOneTotal is 26
+            print("\nYou got 26! Let's see what Player 2 can do...") # print they got 26
+            playerOnePerfectScore = True #set playerOnePerfectScore to true
+
+            return "Perfect" # return perfect
+
+    elif (plr == 2): # else if plr is 2
+
+        if (playerTwoTotal > 26): # if playerTwoTotal is greater than 26
+            print("\nYou got more than 26, you lose! For now... If Player 2 get's over 26, this round won't count!") # print they got greater than 26
+            playerTwoOver = True # set playerTwoOver to true
+
+            return "Over" # return over
+        elif (playerTwoTotal == 26): # else if playerTwoTotal is 26
+            print("\nYou got 26! Let's see what Player 2 can do...") # print they got 26
+            playerTwoPerfectScore = True # set playerTwoPerfectScore to true
+
+            return "Perfect" # return perfect
+
+def checkWhoWon(oneTotal, twoTotal): # set checkWhoWon function with oneTotal and twoTotal parameters
+
+    global playerOneOver # get global vars
+    global playerTwoOver
+    global playerOneWins
+    global playerTwoWins
+
+    if (playerOneOver and playerTwoOver): # if playerOneOver and playerTwoOver is true
+        print("You BOTH got over 26! This round won't count ):") # tell them that they both got over 26
+    
+    elif (playerOneOver): # else if only playerOneOver is true
+        playerTwoWins = playerTwoWins + 1 # add one win to playerTwoWins
+        print(f"Player one got over 26! Player two wins {playerTwoWins} wins")
+    
+    elif (playerTwoOver): # else if only playerTwoOver is true
+        playerOneWins = playerOneWins + 1 # add one win to playerOneWins
+        print(f"Player two got over 26! Player one wins {playerOneWins} wins")
+    
+    elif (playerOneTotal == playerTwoTotal): # else if playerOneTotal is equal to playerTwoTotal
+        print("It's a tie!!") # print it's a tie
+    
+    elif (playerOneTotal > playerTwoTotal): # else if playerOneTotal is greater than playerTwoTotal
+        playerOneWins = playerOneWins + 1 # add one to playerOneWins
+        print(f"Player one got closer to 26! Player one wins and has {playerOneWins} wins")
+    
+    elif (playerOneTotal < playerTwoTotal): # else if playerOneTotal is less than playerTwoTotal
+        playerTwoWins = playerTwoWins + 1 # add one to playerTwoWins
+        print(f"Player two got closer to 26! Player two wins!!! and has {playerTwoWins} wins")
+
+def whoHasWins(oneWins, twoWins): # set whoHasWins with oneWins and twoWins as parameters
+    if (oneWins < twoWins): # if oneWins is less than twoWins
+        print(f"Player two had more wins! Player one wins: {oneWins}. Player two wins: {twoWins}") # print plr 2 had more wins
+    elif (oneWins > twoWins): # if oneWins is greater than twoWins
+        print(f"Player one had more wins! Player one wins: {oneWins}. Player two wins: {twoWins}") # print plr 1 had more wins
+
+
+while True: # Runs the game unless told not to
+    
+
+    introAsk = intro() # YAY INTRO!!!
+
+    setVars() # Resets variables
+
+    
+    for rounds in range(5): # makes the game last 5 rounds
+
+        setVars() # Resets variables
+        shuffle() # shuffles the deck
+
+        printRound(rounds) # Adds 1 to the rounds variable everytime the game runs
+
+        while playerOneTurn: # P1 Turns
+
+            drewCardStart = drawFirstCard() # Draws card
+
+            playerOneTotal = drewCardStart # Adds the value of a card to the player total
+
+            print("\nPlayer one, you drew a", drewCardStart, "/ 26.")  # Prints what you card you drew from the deck
+            time.sleep(1)
+            
+            while True: # Drawing Section for P1
+
+                # ask P1 if they want to risk or keep
+                riskQuestion = riskFunctionAsk()
+
+                if (riskQuestion): # will draw another card if you risked
+                    print("\nOkay, you risked! We will draw another card!")
+                    time.sleep(2)
+                    
+                    drewCard = drawCard(1)
+
+                    # add drew card to player 1 total
+                    playerOneTotal = playerOneTotal + drewCard
+                    print("\nYou drew a", str(drewCard) + ". You now have", playerOneTotal, "/ 26.")
+
+
+                    plrTotalCheck = checkPlayerTotal(1) # checks if player 1's deck value is over 26
+
+                    if (plrTotalCheck == "Over"):
+                        break
+                    elif (plrTotalCheck == "Perfect"):
+                        break
+
+                elif (riskQuestion == False): # ends player 1's turn and player 2's turn starts
+                    print("\nOkay, Player 2's turn!")
+                    time.sleep(2)
+                    break
+
+                else: # makes sure you enter a valid input
+                    print("\nPlease Input a \"Risk\" or a \"Keep\"")
+            
+            playerOneTurn = False # Stops player 1's turn
+
+        while playerOneTurn == False: # P2s turn
+
+            # draw first card                
+            drewCardStart2 = drawFirstCard()
+
+            playerTwoTotal = drewCardStart2
+
+            print("\nPlayer Two, you drew a", playerTwoTotal, "/ 26.")
+            time.sleep(1)
+            
+            while True: # Drawing Section for P2
+
+                riskQuestion = riskFunctionAsk() #asks if you want to risk
+
+                if (riskQuestion): 
+                    print("\nOkay, you risked! We will draw another card!")
+                    time.sleep(2)
+
+                    # draw another card
+                    drewCard2 = drawCard(2)
+
+                    playerTwoTotal = playerTwoTotal + drewCard2 # prints what you drew from the deck and your total after you drew the card
+                    print("\nYou drew a", str(drewCard2) + ". You now have", playerTwoTotal, "/ 26.")
+
+                    plrTotalCheck = checkPlayerTotal(2) # checks if player 2's total value is over 26
+
+                    if (plrTotalCheck == "Over"):
+                        break
+                    elif (plrTotalCheck == "Perfect"):
+                        break
+
+                elif (riskQuestion == False): # checks who won the round
+                    print("\nOkay, let's see who won!")
+                    time.sleep(2)
+                    break
+
+                else: 
+                    print("\nPlease Input a \"Risk\" or a \"Keep\"")
+
+            playerOneTurn = True # resets the code
+
+        # checking who won
+        checkWhoWon(playerOneTotal, playerTwoTotal)
+             
+
+    playAgainQuestion = playAgain() # asks if you would like to play again
+
+    whoHasWins(playerOneWins, playerTwoWins) # prints how many wins each player has
+
+    if (playAgainQuestion == True): # restarts the code if the user wants to play again
+        continue
+    elif (playAgainQuestion == False): # ends the code if the user doesn't want to play again
+        break
